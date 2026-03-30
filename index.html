@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>蜀山志 · 四川名山大川导航</title>
+    <style>
+        /* ---------- 极简样式，只做铺满屏幕 + 山水氛围 ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 全屏背景：模拟云海山峦的渐变 + 微光纹理，铺满整个视口 */
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(145deg, #1a3c2c 0%, #0e2a1f 50%, #0b1f18 100%);
+            /* 山巅雪顶感 */
+            background-attachment: fixed;
+            font-family: 'Segoe UI', 'Roboto', 'Noto Sans', system-ui, -apple-system, sans-serif;
+            color: #f0f3ea;
+        }
+
+        /* 主容器：内容可读区域，但背景完全铺满 */
+        .wrapper {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 1.8rem;
+            background: rgba(10, 25, 18, 0.65); /* 半透明毛玻璃感，提升文字可读性，不破坏全屏背景 */
+            backdrop-filter: blur(2px);
+            border-radius: 0;
+            min-height: 100vh;
+        }
+
+        /* 标题区 */
+        .hero {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            border-bottom: 2px solid #c9a87b;
+            display: inline-block;
+            width: 100%;
+        }
+        h1 {
+            font-size: 3rem;
+            letter-spacing: 4px;
+            font-weight: 600;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            background: linear-gradient(135deg, #f9e0a0, #e2c28b);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .sub {
+            font-size: 1.1rem;
+            color: #e6dcc0;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        .intro {
+            background: rgba(0,0,0,0.4);
+            padding: 1.2rem 1.8rem;
+            border-radius: 48px;
+            margin: 1.5rem 0;
+            border-left: 5px solid #e2b87a;
+            line-height: 1.6;
+        }
+
+        /* 表格样式：古朴山水风格，铺满宽度 */
+        .mountain-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: rgba(25, 40, 30, 0.7);
+            backdrop-filter: blur(4px);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.3);
+        }
+        .mountain-table th, .mountain-table td {
+            border: 1px solid #9c7e5c;
+            padding: 14px 12px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        .mountain-table th {
+            background: #2c4a35cc;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffefcf;
+            letter-spacing: 1px;
+        }
+        .mountain-table td {
+            color: #f7f2df;
+        }
+        .nav-link {
+            background: #e9b35f;
+            color: #1e3a2f;
+            padding: 6px 14px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            display: inline-block;
+            border: none;
+        }
+        .nav-link:hover {
+            background: #ffcd7e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            color: #0a2a1c;
+        }
+        /* 超链接默认样式（外部链接和锚点） */
+        a {
+            color: #f3cd81;
+            text-decoration: none;
+            border-bottom: 1px dotted #bfa16a;
+            transition: 0.2s;
+        }
+        a:hover {
+            color: #ffe2a4;
+            border-bottom-color: #f5bc70;
+        }
+
+        /* 景点详细介绍卡片 (锚点区域) */
+        .detail-section {
+            margin: 3rem 0 1.5rem;
+            padding-top: 1rem;
+        }
+        .detail-card {
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #c7aa7b;
+            transition: all 0.2s;
+            scroll-margin-top: 80px;  /* 锚点滚动偏移 */
+        }
+        .detail-card h3 {
+            font-size: 1.8rem;
+            color: #f7dd9c;
+            margin-bottom: 0.75rem;
+            border-left: 6px solid #e6b875;
+            padding-left: 1rem;
+        }
+        .detail-card p {
+            line-height: 1.6;
+            margin: 0.8rem 0;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 0.6rem;
+            font-size: 0.85rem;
+            background: #4b3a28;
+            padding: 4px 12px;
+            border-radius: 40px;
+            color: #ffefcf;
+        }
+
+        /* 趣味提示 & 分隔线 */
+        .fun-fact {
+            background: #1e3327aa;
+            border-radius: 28px;
+            padding: 1rem 1.8rem;
+            margin: 2rem 0 1rem;
+            text-align: center;
+            font-weight: 500;
+            border: 1px solid #b48c54;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1.2rem;
+            font-size: 0.8rem;
+            color: #cdc2a0;
+            border-top: 1px solid #8d6f48;
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 700px) {
+            .wrapper {
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            .mountain-table th, .mountain-table td {
+                padding: 8px 6px;
+                font-size: 0.85rem;
+            }
+            .detail-card h3 {
+                font-size: 1.4rem;
+            }
+            .nav-link {
+                padding: 4px 10px;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <!-- 头部导航意象 -->
+    <div class="hero">
+        <h1>🏔️ 蜀山志 · 名山大川导航</h1>
+        <div class="sub">“巴蜀之巅，云瀑飞泉，一山一世界”</div>
+    </div>
+
+    <!-- 引言：使用 p 与 br 结合 -->
+    <div class="intro">
+        <p>🌄 四川，千峰竞秀，万壑藏幽。从佛教圣地到雪山之王，每一座山都是一卷史诗。<br>
+        点击表格中的 <strong>「山径导航」</strong> 可直达详细风物志，亦可借助外部链接探访百科。<br>
+        👇 下面为巴蜀名山图谱，愿君乘风，一览众山小。</p>
+    </div>
+
+    <!-- 核心表格：展示名山信息 (基础 table 标签) -->
+    <table class="mountain-table">
+        <thead>
+            <tr>
+                <th>山岳名称</th>
+                <th>海拔 (米)</th>
+                <th>蜀中特色</th>
+                <th>导航 / 探幽</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>⛰️ 峨眉山</td>
+                <td>3099</td>
+                <td>佛光云海 · 普贤道场 · 灵猴嬉戏</td>
+                <td><a class="nav-link" href="#emei">📖 山径导航 → 峨眉胜境</a> &nbsp;|&nbsp; <a href="https://baike.baidu.com/item/峨眉山" target="_blank" rel="noopener">百科外链</a></td>
+            </tr>
+            <tr>
+                <td>🏯 青城山</td>
+                <td>1260</td>
+                <td>道教发源地 · 幽甲天下 · 养生秘境</td>
+                <td><a class="nav-link" href="#qingcheng">📖 山径导航 → 青城幽意</a> &nbsp;|&nbsp; <a href="https://baike.baidu.com/item/青城山" target="_blank" rel="noopener">百科外链</a></td>
+            </tr>
+            <tr>
+                <td>🗻 四姑娘山</td>
+                <td>6250</td>
+                <td>东方阿尔卑斯 · 雪山徒步 · 幺妹峰传奇</td>
+                <td><a class="nav-link" href="#siguniang">📖 山径导航 → 四姑娘山</a> &nbsp;|&nbsp; <a href="https://baike.baidu.com/item/四姑娘山" target="_blank" rel="noopener">百科外链</a></td>
+            </tr>
+            <tr>
+                <td>❄️ 贡嘎山</td>
+                <td>7556</td>
+                <td>蜀山之王 · 冰川壮阔 · 日照金山</td>
+                <td><a class="nav-link" href="#gongga">📖 山径导航 → 贡嘎神山</a> &nbsp;|&nbsp; <a href="https://baike.baidu.com/item/贡嘎山" target="_blank" rel="noopener">百科外链</a></td>
+            </tr>
+            <tr>
+                <td>🌈 稻城三神山</td>
+                <td>6032</td>
+                <td>香格里拉之魂 · 三怙主雪峰 · 净土徒步</td>
+                <td><a class="nav-link" href="#daocheng">📖 山径导航 → 三神山纪</a> &nbsp;|&nbsp; <a href="https://baike.baidu.com/item/稻城三神山" target="_blank" rel="noopener">百科外链</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- 趣味小彩蛋：用 br 标签与 p 标签结合显示小贴士 -->
+    <div class="fun-fact">
+        <p>✨ <strong>蜀山冷知识</strong> ✨<br>
+        峨眉山金顶的“佛光”出现频率可达年均70次以上；<br>
+        青城山有“青城天下幽”之称，陆游曾写“为爱丈人山，丹梯近幽意”；<br>
+        贡嘎山在藏语中意为“最高的雪山”，是横断山脉最高峰。<br>
+        四姑娘山被誉为“户外天堂”，拥有众多国际攀登路线。<br>
+        ➤ 使用导航链接，探索每一座山的诗意与神秘。</p>
+    </div>
+
+    <!-- 详细景点区 (锚点区域) 使用 p、br、超链接等基础标签 -->
+    <div class="detail-section">
+        <!-- 峨眉山 锚点 -->
+        <div id="emei" class="detail-card">
+            <h3>⛰️ 峨眉山 · 云上梵宫</h3>
+            <p><strong>位置：</strong> 四川乐山市峨眉山市<br>
+            <strong>标签：</strong> 世界文化与自然双重遗产，中国四大佛教名山之一。<br>
+            🌄 十方普贤金像矗立金顶，可观云海、日出、圣灯、佛光四大奇观。山中古寺林立，报国寺、伏虎寺、万年寺等散发着千年禅意。<br>
+            🐒 山间灵猴是峨眉一景，但请注意保管好随身物品。<br>
+            ✨ 最佳季节：春秋两季，四季皆可访。<br>
+            <a href="#" class="back-link">⬆ 返回导航表格</a> &nbsp;&nbsp; <a href="https://www.emeishan.gov.cn/" target="_blank" rel="noopener">📌 景区官网</a></p>
+        </div>
+
+        <!-- 青城山 锚点 -->
+        <div id="qingcheng" class="detail-card">
+            <h3>🏯 青城山 · 幽绝天下</h3>
+            <p><strong>位置：</strong> 成都都江堰市<br>
+            <strong>标签：</strong> 道教发祥地之一，五大仙山之一。<br>
+            🌿 前山宫观密集，天师洞、上清宫、建福宫藏着道教文化瑰宝；后山则以原始山水风光闻名，飞瀑流泉，翠映湖如碧玉。<br>
+            🧘 “青城道茶”与养生文化不可错过。<br>
+            📜 传说黄帝曾在此问道于宁封子，历代文人留下无数诗篇。<br>
+            <a href="#" class="back-link">⬆ 返回导航表格</a> &nbsp;&nbsp; <a href="https://www.qingchengshan.gov.cn/" target="_blank" rel="noopener">🏞️ 旅游官网</a></p>
+        </div>
+
+        <!-- 四姑娘山 锚点 -->
+        <div id="siguniang" class="detail-card">
+            <h3>🗻 四姑娘山 · 东方的阿尔卑斯</h3>
+            <p><strong>位置：</strong> 阿坝州小金县<br>
+            <strong>标签：</strong> 国家级自然保护区，户外天堂。<br>
+            🧗 由四座连绵雪山组成，幺妹峰海拔6250米，是攀登者的梦想之巅。双桥沟、长坪沟、海子沟景色绝美，徒步、露营、攀冰皆可。<br>
+            🌸 夏季高山杜鹃烂漫，秋日彩林如画。<br>
+            🏕️ 海子沟的高山湖泊倒映雪山，如梦似幻。<br>
+            <a href="#" class="back-link">⬆ 返回导航表格</a> &nbsp;&nbsp; <a href="https://www.sgns.gov.cn/" target="_blank" rel="noopener">🗺️ 四姑娘山管理局</a></p>
+        </div>
+
+        <!-- 贡嘎山 锚点 -->
+        <div id="gongga" class="detail-card">
+            <h3>❄️ 贡嘎山 · 蜀山之王</h3>
+            <p><strong>位置：</strong> 甘孜州康定市以南<br>
+            <strong>标签：</strong> 横断山脉最高峰，极高山之王。<br>
+            🧊 贡嘎山周围有上百座雪山，冰川发育完整，海螺沟冰川是最易接近的低海拔现代冰川。<br>
+            🌅 牛背山、子梅垭口是观赏日照金山的绝佳地点。<br>
+            🏔️ 登山难度极大，死亡率极高，普通人以观山、徒步为最佳选择。<br>
+            <a href="#" class="back-link">⬆ 返回导航表格</a> &nbsp;&nbsp; <a href="https://www.gongga.cn/" target="_blank" rel="noopener">🏔️ 贡嘎山旅游网</a></p>
+        </div>
+
+        <!-- 稻城三神山 锚点 -->
+        <div id="daocheng" class="detail-card">
+            <h3>🌈 稻城三神山 · 最后的香格里拉</h3>
+            <p><strong>位置：</strong> 甘孜州稻城县<br>
+            <strong>标签：</strong> 仙乃日、央迈勇、夏诺多吉三座雪峰，藏传佛教圣地。<br>
+            💧 珍珠海、牛奶海、五色海如宝石镶嵌山间。洛绒牛场是徒步者的起点，夏季野花盛开，雪峰倒映。<br>
+            🦌 这里是“蓝色星球上最后一片净土”，电影《从你的全世界路过》取景地。<br>
+            🌟 最佳时间：9-10月，秋色与雪山交相辉映。<br>
+            <a href="#" class="back-link">⬆ 返回导航表格</a> &nbsp;&nbsp; <a href="https://www.yading.gov.cn/" target="_blank" rel="noopener">🏞️ 亚丁景区官网</a></p>
+        </div>
+    </div>
+
+    <!-- 额外段落：用 p + br 加上登山建议 -->
+    <div class="intro" style="margin-top: 1rem; background: rgba(0,0,0,0.3);">
+        <p>🧭 <strong>登山&徒步指南（基础贴士）</strong><br>
+        • 高原地区注意防高反，初入川西避免剧烈运动。<br>
+        • 山区天气多变，备好防风防雨衣物，尊重当地文化与信仰。<br>
+        • 无痕山林，带走垃圾，保护脆弱的高山生态。<br>
+        • 使用表格中的「百科外链」可获取详细攻略，点击「山径导航」回顾每座山的精华介绍。<br>
+        —— 愿每一程山水，都有诗意相伴 ——</p>
+    </div>
+
+    <footer>
+        🌄 蜀山志 · 四川名山大川导航 | 以基础HTML标签敬山河 | 全屏铺满，一目千里<br>
+        部分资料参考自公开文献，仅为热爱山野者提供灵感。
+    </footer>
+</div>
+</body>
+</html>
