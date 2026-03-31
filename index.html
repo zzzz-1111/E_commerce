@@ -22,16 +22,122 @@
             color: #2c3a2b;
         }
 
-        /* 主容器：改为双栏网格布局 */
+        /* 主容器：改为三栏网格布局 */
         .wrapper {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 2rem 1.8rem;
             background: rgba(255, 250, 240, 0.85);
             min-height: 100vh;
             display: grid;
-            grid-template-columns: 1fr 300px;
+            grid-template-columns: 280px 1fr 300px;
             gap: 2rem;
+        }
+
+        /* 左侧风景轮播栏 */
+        .scenery-sidebar {
+            background: rgba(250, 248, 245, 0.95);
+            border-radius: 32px;
+            padding: 1.5rem 1rem;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+            border: 1px solid #e1d5c5;
+            backdrop-filter: blur(2px);
+            height: fit-content;
+            position: sticky;
+            top: 1.5rem;
+            overflow: hidden;
+        }
+
+        .scenery-sidebar h2 {
+            font-size: 1.5rem;
+            color: #6a5c3c;
+            border-left: 6px solid #b9a07a;
+            padding-left: 1rem;
+            margin-bottom: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* 滚动容器 */
+        .scenery-scroll-container {
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+            border-radius: 20px;
+            background: linear-gradient(180deg, #f5f0e8 0%, #e8e0d5 100%);
+        }
+
+        .scenery-scroll-content {
+            animation: scrollUp 15s linear infinite;
+        }
+
+        .scenery-scroll-container:hover .scenery-scroll-content {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollUp {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-50%);
+            }
+        }
+
+        .scenery-item {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .scenery-item:hover {
+            transform: scale(1.02);
+        }
+
+        .scenery-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .scenery-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #5a4a3a;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .scenery-img-box {
+            width: 100%;
+            height: 120px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #e0d5c8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .scenery-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .scenery-placeholder {
+            font-size: 3rem;
+            opacity: 0.5;
+        }
+
+        .scenery-desc {
+            font-size: 0.8rem;
+            color: #7a6a5a;
+            margin-top: 0.5rem;
+            line-height: 1.4;
         }
 
         /* 主内容区 */
@@ -256,6 +362,16 @@
         }
 
         /* 移动端适配：侧边栏移到主内容下方 */
+        @media (max-width: 1200px) {
+            .wrapper {
+                grid-template-columns: 1fr 300px;
+                gap: 1.5rem;
+            }
+            .scenery-sidebar {
+                display: none;
+            }
+        }
+
         @media (max-width: 900px) {
             .wrapper {
                 grid-template-columns: 1fr;
@@ -265,6 +381,9 @@
             .story-sidebar {
                 position: static;
                 margin-top: 0.5rem;
+            }
+            .scenery-sidebar {
+                display: none;
             }
         }
 
@@ -288,6 +407,73 @@
 </head>
 <body>
 <div class="wrapper">
+    <!-- 左侧风景轮播栏 -->
+    <aside class="scenery-sidebar">
+        <h2>🖼️ 风景掠影</h2>
+        <div class="scenery-scroll-container">
+            <div class="scenery-scroll-content">
+                <!-- 第一组 -->
+                <div class="scenery-item">
+                    <div class="scenery-title">⛰️ 峨眉山金顶</div>
+                    <div class="scenery-img-box">
+                        <img src="images/scenery-emeishan.jpg" alt="峨眉山" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'scenery-placeholder\'>⛰️</span>';">
+                    </div>
+                    <div class="scenery-desc">云海日出，佛光普照</div>
+                </div>
+                <div class="scenery-item">
+                    <div class="scenery-title">🗻 四姑娘山雪峰</div>
+                    <div class="scenery-img-box">
+                        <img src="images/scenery-siguniang.jpg" alt="四姑娘山" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'scenery-placeholder\'>🗻</span>';">
+                    </div>
+                    <div class="scenery-desc">东方阿尔卑斯，雪山巍峨</div>
+                </div>
+                <div class="scenery-item">
+                    <div class="scenery-title">❄️ 贡嘎日照金山</div>
+                    <div class="scenery-img-box">
+                        <img src="images/scenery-gongga.jpg" alt="贡嘎山" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'scenery-placeholder\'>❄️</span>';">
+                    </div>
+                    <div class="scenery-desc">蜀山之王，日照金山</div>
+                </div>
+                <div class="scenery-item">
+                    <div class="scenery-title">🌈 稻城三神山</div>
+                    <div class="scenery-img-box">
+                        <img src="images/scenery-daocheng.jpg" alt="稻城三神山" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'scenery-placeholder\'>🌈</span>';">
+                    </div>
+                    <div class="scenery-desc">香格里拉之魂，净土圣地</div>
+                </div>
+                <!-- 复制一组实现无缝滚动 -->
+                <div class="scenery-item">
+                    <div class="scenery-title">⛰️ 峨眉山金顶</div>
+                    <div class="scenery-img-box">
+                        <img src="images/scenery-emeishan.jpg" alt="峨眉山" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'scenery-placeholder\'>⛰️</span>';">
+                    </div>
+                    <div class="scenery-desc">云海日出，佛光普照</div>
+                </div>
+                <div class="scenery-item">
+                    <div class="scenery-title">🗻 四姑娘山雪峰</div>
+                    <div class="scenery-img-box">
+                        <img src="images/scenery-siguniang.jpg" alt="四姑娘山" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'scenery-placeholder\'>🗻</span>';">
+                    </div>
+                    <div class="scenery-desc">东方阿尔卑斯，雪山巍峨</div>
+                </div>
+                <div class="scenery-item">
+                    <div class="scenery-title">❄️ 贡嘎日照金山</div>
+                    <div class="scenery-img-box">
+                        <img src="images/scenery-gongga.jpg" alt="贡嘎山" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'scenery-placeholder\'>❄️</span>';">
+                    </div>
+                    <div class="scenery-desc">蜀山之王，日照金山</div>
+                </div>
+                <div class="scenery-item">
+                    <div class="scenery-title">🌈 稻城三神山</div>
+                    <div class="scenery-img-box">
+                        <img src="images/scenery-daocheng.jpg" alt="稻城三神山" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'scenery-placeholder\'>🌈</span>';">
+                    </div>
+                    <div class="scenery-desc">香格里拉之魂，净土圣地</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
     <!-- 主内容区：保留全部原有内容 -->
     <div class="main-content">
         <div class="hero">
@@ -317,12 +503,7 @@
                     <td>佛光云海 · 普贤道场 · 灵猴嬉戏</td>
                     <td><a class="nav-link" href="#emei">📖 山径导航 → 峨眉胜境</a> &nbsp;|&nbsp; <a href="https://baike.baidu.com/item/峨眉山" target="_blank" rel="noopener">百科外链</a></td>
                 </tr>
-                <tr>
-                    <td>🏯 青城山</td>
-                    <td>1260</td>
-                    <td>道教发源地 · 幽甲天下 · 养生秘境</td>
-                    <td><a class="nav-link" href="#qingcheng">📖 山径导航 → 青城幽意</a> &nbsp;|&nbsp; <a href="https://baike.baidu.com/item/青城山" target="_blank" rel="noopener">百科外链</a></td>
-                </tr>
+
                 <tr>
                     <td>🗻 四姑娘山</td>
                     <td>6250</td>
@@ -362,16 +543,6 @@
                 🐒 山间灵猴是峨眉一景，但请注意保管好随身物品。<br>
                 ✨ 最佳季节：春秋两季，四季皆可访。<br>
                 <a href="#" class="back-link">⬆ 返回导航表格</a> &nbsp;&nbsp; <a href="https://www.emeishan.gov.cn/" target="_blank" rel="noopener">📌 景区官网</a></p>
-            </div>
-
-            <div id="qingcheng" class="detail-card">
-                <h3>🏯 青城山 · 幽绝天下</h3>
-                <p><strong>位置：</strong> 成都都江堰市<br>
-                <strong>标签：</strong> 道教发祥地之一，五大仙山之一。<br>
-                🌿 前山宫观密集，天师洞、上清宫、建福宫藏着道教文化瑰宝；后山则以原始山水风光闻名，飞瀑流泉，翠映湖如碧玉。<br>
-                🧘 “青城道茶”与养生文化不可错过。<br>
-                📜 传说黄帝曾在此问道于宁封子，历代文人留下无数诗篇。<br>
-                <a href="#" class="back-link">⬆ 返回导航表格</a> &nbsp;&nbsp; <a href="https://www.qingchengshan.gov.cn/" target="_blank" rel="noopener">🏞️ 旅游官网</a></p>
             </div>
 
             <div id="siguniang" class="detail-card">
@@ -423,13 +594,6 @@
             <div class="story-content">
                 <p>传说白素贞曾在峨眉山白龙洞修行千年，吸天地灵气，最终化为人形。至今山中仍有“白龙洞”遗迹，洞前林木幽深，当地人说每逢雨雾，似有白衣女子影影绰绰。<br>
                 🌧️ 民间流传“峨眉天下秀，白蛇此地修”。</p>
-            </div>
-        </div>
-        <div class="story-item">
-            <div class="story-title">🧘 青城山 · 天师降魔</div>
-            <div class="story-content">
-                <p>东汉张道陵在青城山结茅传道，传说曾与八部鬼帅大战于山巅，以符咒降服妖魔，奠定道教正一盟威之道。今上清宫旁“降魔石”犹在，石上隐约可见古篆文。<br>
-                🪶 每年农历三月三，山中仍会举行祈福法会。</p>
             </div>
         </div>
         <div class="story-item">
